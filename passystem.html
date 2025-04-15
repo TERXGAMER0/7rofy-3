@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      background-color: indigo;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial;
+    }
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    input {
+      padding: 10px;
+      width: 250px;
+      font-size: 18px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    p#error {
+      color: red;
+      display: none;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>ادخل رمز التفعيل للدخول</h2>
+    <input id="code" placeholder="الرمز السري">
+    <br>
+    <button onclick="submitCode()">ادخال</button>
+    <p id="error">رمز خاطئ، حاول مرة أخرى</p>
+    <p style="font-size: 15px">
+      إذا لم يكن لديك رمز، احصل عليه من بوت التليجرام:<br>
+      <a href="https://t.me/ii40TSM_bot" target="_blank">اضغط هنا</a>
+    </p>
+  </div>
+
+  <script>
+    function submitCode() {
+      const code = document.getElementById("code").value;
+      fetch("/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          window.location.href = "/index4.html";
+        } else {
+          document.getElementById("error").style.display = "block";
+        }
+      });
+    }
+  </script>
+</body>
+</html>
