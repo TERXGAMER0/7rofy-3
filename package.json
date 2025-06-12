@@ -1,7 +1,13 @@
 {
   "name": "7rofy-3",
   "version": "1.0.0",
-  "description": "حروف مع – لعبة تفاعلية مع نظام تفعيل رمز",
-  "scripts": {},
-  "dependencies": {}
+  "description": "لعبة حروف مع وربطها بـ Netlify Functions للتحقق من رمز التفعيل",
+  "main": "app.js",
+  "scripts": {
+    "start": "live-server --port=8080"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  }
 }
