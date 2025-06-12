@@ -1,8 +1,15 @@
 [build]
-  publish = "."
+  publish   = "."
   functions = "netlify/functions"
 
+# توجه طلب التحقق إلى الدالة
 [[redirects]]
-  from = "/api/verify"
-  to = "/.netlify/functions/verify"
+  from   = "/.netlify/functions/verify"
+  to     = "/.netlify/functions/verify"
+  status = 200
+
+# أي مسار غير موجود يعاد إلى index.html (SPA fallback)
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
   status = 200
