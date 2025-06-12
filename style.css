@@ -1,0 +1,610 @@
+/* ==================== Activation Overlay Styles ==================== */
+#secret-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(75, 0, 130, 0.9); /* بنفسجي غامق */
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.secret-container {
+  text-align: center;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.secret-container h2 {
+  margin-bottom: 15px;
+  font-family: "Simplified Arabic";
+}
+
+.secret-container input {
+  padding: 10px;
+  font-size: 16px;
+  width: 250px;
+  margin-bottom: 10px;
+}
+
+.secret-container button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  display: none;
+}
+
+/* ========== إعدادات الخط ========== */
+@font-face {
+  font-family: 'AAGalaxy';
+  src: url('AA-GALAXY.otf') format('opentype');
+}
+
+/* ========== Reset & Global ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #6F2BAA;
+  font-family: 'AAGalaxy', sans-serif;
+  direction: ltr;
+  overflow: hidden;
+}
+
+/* ========== Falling letters container ========== */
+#fallingContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 1s ease;
+}
+
+/* ========== Intro wrapper ========== */
+.wrapper {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 20px;
+  padding: 0 10px;
+  transition: transform 0.5s ease;
+}
+
+.title {
+  font-size: 80px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.harouf {
+  color: #FFD400;
+  text-shadow: 5px 5px 0 #3c2056;
+}
+
+.ma {
+  color: #3ABAF4;
+  text-shadow: 5px 5px 0 #3c2056;
+  margin-left: 10px;
+}
+
+/* ========== Input box ========== */
+.input-box {
+  width: 270px;
+  height: 60px;
+  background: #FFF;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.input-box:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.input-box input {
+  width: 90%;
+  height: 80%;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  text-align: center;
+}
+
+/* ========== Start button ========== */
+.start-button {
+  width: 300px;
+  height: 60px;
+  background: #FFF;
+  color: #6F2BAA;
+  border: none;
+  border-radius: 8px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.start-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+  background-color: #f0f0f0;
+}
+
+.start-button:active {
+  transform: scale(0.98);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* ========== Final transition text ========== */
+.final-text {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 3;
+  padding: 0 10px;
+  transition: opacity 0.5s ease;
+}
+
+.final-line1,
+.final-line2,
+.final-line3 {
+  margin: 0;
+  line-height: 1;
+  font-weight: bold;
+}
+
+.final-line1 {
+  color: #FFD400;
+  text-shadow: 5px 5px 0 #3c2056;
+  font-size: 90px;
+}
+
+.final-line2 {
+  color: #3ABAF4;
+  text-shadow: 5px 5px 0 #3c2056;
+  font-size: 50px;
+  margin-top: -20px;
+  transform: translateX(-50px);
+}
+
+.final-line3 {
+  color: #e43b41;
+  text-shadow: 5px 5px 0 #3c2056;
+  font-size: 80px;
+  margin-top: -10px;
+}
+
+/* ========== Popup animation ========== */
+.animated {
+  animation: popup 2.5s ease-in-out forwards;
+}
+
+@keyframes popup {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(2) rotate(5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* ========== Falling letter ========== */
+.falling-letter {
+  position: absolute;
+  color: #FFFFFF;
+  text-shadow: 5px 5px 0 #3c2056;
+  font-size: 40px;
+  opacity: 0.8;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
+/* ========== Game container ========== */
+.game-container {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: #6F2BAA;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* ========== Game title ========== */
+.game-title {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 11;
+}
+
+.game-title .harouf {
+  font-size: 60px;
+  color: #FFD400;
+  text-shadow: 5px 5px 0 #3c2056;
+}
+
+.game-title .ma {
+  font-size: 30px;
+  color: #3ABAF4;
+  text-shadow: 5px 5px 0 #3c2056;
+  margin-top: -10px;
+}
+
+.game-title .player-name {
+  font-size: 50px;
+  color: #e43b41;
+  text-shadow: 5px 5px 0 #3c2056;
+  margin-top: -10px;
+}
+
+/* ========== Container & main grid ========== */
+.game-content * {
+  user-select: none;
+}
+
+.container {
+  width: 90%;
+  max-width: 659px;
+  height: 45vh;
+  min-height: 400px;
+  background-color: #F7931E;
+  border-radius: 30px;
+  border: 10px solid #2E1A47;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.top-bottom {
+  position: absolute;
+  width: 100%;
+  height: 12%;
+  background-color: #39B54A;
+}
+
+.top-bottom.top {
+  top: 0;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.top-bottom.bottom {
+  bottom: 0;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+/* ========== Main hex grid ========== */
+.main {
+  --s: 80px;
+  --m: 0px;
+  transform: translateX(-15px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.row {
+  display: flex;
+  margin-bottom: -30px;
+  justify-content: center;
+}
+
+.row:nth-child(even) {
+  margin-left: calc(var(--s) / 1 + var(--m));
+}
+
+@media (max-width: 768px) {
+  .main {
+    --s: 60px;
+    --m: 1px;
+    transform: translateX(-10px);
+  }
+}
+
+/* ========== Cell ========== */
+.cell {
+  width: var(--s);
+  margin: var(--m);
+  height: calc(var(--s) * 1.1547);
+  display: inline-flex;
+  font-size: 1.2rem;
+  font-weight: bold;
+  clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+  background: rgb(218, 218, 218);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: none !important;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 0 0 2px white;
+  position: relative;
+  user-select: none;
+}
+
+.cell:focus,
+.cell:active {
+  outline: none;
+  box-shadow: 0 0 0 2px white;
+}
+
+/* ========== Buttons ========== */
+.buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  position: relative;
+  z-index: 10;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.game-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 2rem;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  white-space: nowrap;
+  flex: 1 1 auto;
+  min-width: 120px;
+  max-width: 200px;
+}
+.restart {
+  background-color: #dc3545;
+  z-index: 10;
+}
+.restart:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+  z-index: 10;
+}
+.settings-btn {
+  background-color: #6c757d;
+  z-index: 10;
+}
+.settings-btn:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+  z-index: 10;
+}
+.congrats-btn {
+  background-color: #3ABAF4;
+  z-index: 10;
+}
+.congrats-btn:hover {
+  background-color: #2a9fd8;
+  transform: translateY(-2px);
+  z-index: 10;
+}
+.copy-btn {
+  /* not used here */
+}
+
+/* ========== Settings panel ========== */
+.cell-settings {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #3c2056;
+  padding: 15px;
+  border-radius: 10px;
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 100;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 400px;
+}
+.cell-settings.active {
+  display: flex;
+}
+.settings-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.settings-label {
+  color: white;
+  font-size: 16px;
+  margin-right: 10px;
+  z-index: 10;
+}
+.settings-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 2rem;
+  background-color: #3ABAF4;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+  z-index: 10;
+}
+.settings-button:hover {
+  background-color: #2a9fd8;
+}
+
+/* ========== Reset colors button ========== */
+#resetColors {
+  background-color: #6c757d;
+}
+#resetColors:hover {
+  background-color: #5a6268;
+}
+
+/* ========== Name input dialog ========== */
+.name-input-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #3c2056;
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 100;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 80%;
+  max-width: 400px;
+}
+.name-input-container.active {
+  display: block;
+}
+.name-input {
+  width: 95%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+}
+.save-name-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #3ABAF4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+.save-name-btn:hover {
+  background-color: #2a9fd8;
+}
+
+/* ========== Overlay Congrats ========== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.overlay.active {
+  display: flex;
+}
+.sparkles {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.sparkle {
+  width: 3rem;
+  height: 3rem;
+  background: #fbbf24;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: bounce 1s infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+.congrats-text {
+  color: rgb(218, 218, 218);
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* ========== Orientation warning ========== */
+.orientation-warning {
+  display: none;
+  color: #e0e0e0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 1rem;
+  background: #dc3545;
+  z-index: 2000;
+}
+@media screen and (orientation: landscape) and (max-width: 1024px) {
+  .orientation-warning {
+    display: block;
+  }
+}
+
+/* ========== Footer ========== */
+.footer-note {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ddd;
+  font-size: 0.75rem;
+  text-align: center;
+  width: 100%;
+  z-index: 0;
+}
+.footer-note a {
+  color: #b3e5fc;
+  text-decoration: none;
+}
+.footer-note a:hover {
+  text-decoration: underline;
+}
+.update-note {
+  font-size: 0.6rem;
+  color: #aaa;
+  margin-top: 4px;
+}
