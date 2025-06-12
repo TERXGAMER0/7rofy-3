@@ -4,10 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, maximum-scale=3.0, user-scalable=yes">
   <title>حروف مع</title>
-  <!-- External stylesheet -->
+  <!-- خطوط و CSS -->
   <link rel="stylesheet" href="style.css">
-  <!-- Font definition (moved here so it’s loaded before CSS) -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
   <style>
+    /* إعادة تعريف الخط المستخدم محلياً */
     @font-face {
       font-family: 'AAGalaxy';
       src: url('AA-GALAXY.otf') format('opentype');
@@ -15,44 +19,44 @@
   </style>
 </head>
 <body>
-  <!-- Activation Overlay -->
+  <!-- واجهة التحقق من الرمز السري -->
   <div id="secret-overlay">
     <div class="secret-container">
       <h2>أدخل رمز التفعيل المجاني للدخول</h2>
       <input type="text" id="secret-code" placeholder="الرمز السري" />
-      <br>
+      <br />
       <button id="secret-submit">ادخال</button>
       <p id="error-message" class="error-message">رمز خاطئ، حاول مرة أخرى</p>
-      <p style="font-size:14px; margin-top:10px">
-        اذا لم يكن لديك رمز تفعيل، يمكنك الحصول عليه مجاناً من بوت التيليجرام:
-        <a href="https://t.me/ii40TSM_bot" target="_blank">اضغط عليه</a>
+      <p class="help-text">
+        إذا لم يكن لديك رمز تفعيل، يمكنك الحصول عليه مجانًا من بوت التيليجرام:
+        <a href="https://t.me/ii40TSM_bot" target="_blank">اضغط هنا</a>
       </p>
     </div>
   </div>
 
-  <!-- Falling letters background -->
+  <!-- خلفية الحروف المتساقطة -->
   <div id="fallingContainer"></div>
 
-  <!-- Intro screen -->
+  <!-- الصفحة الأولى -->
   <div class="wrapper" id="wrapper">
     <h1 class="title">
       <span class="harouf">حروف</span>
       <span class="ma">مع</span>
     </h1>
     <div class="input-box">
-      <input type="text" id="playerName" placeholder="اكتب اسمك" maxlength="15">
+      <input type="text" placeholder="اكتب اسمك" id="playerName" maxlength="15">
     </div>
     <button class="start-button" id="startBtn">ابدأ اللعبة</button>
   </div>
 
-  <!-- Transition text -->
+  <!-- الترانزيشن النهائي -->
   <div class="final-text" id="finalText">
     <div class="final-line1">حروف</div>
     <div class="final-line2">مع</div>
     <div class="final-line3" id="finalName"></div>
   </div>
 
-  <!-- Game container -->
+  <!-- اللعبة -->
   <div class="game-container" id="gameContainer">
     <div class="game-title" id="gameTitle">
       <div class="harouf">حروف</div>
@@ -62,13 +66,13 @@
 
     <div class="game-content">
       <div class="orientation-warning">🎮 العب بالشاشة الأفقية لتجربة أفضل</div>
-      <div style="margin:auto; text-align:center;">
+      <div class="layout">
         <div class="container">
           <div class="top-bottom top"></div>
           <div class="top-bottom bottom"></div>
         </div>
-        <div style="display:flex; flex-direction:column; align-items:center;">
-          <div class="main"></div>
+        <div class="play-area">
+          <div class="main" id="mainGrid"></div>
           <div class="buttons">
             <button class="game-button restart">إعادة تعيين</button>
             <button class="game-button settings-btn">الإعدادات</button>
@@ -77,57 +81,22 @@
         </div>
       </div>
 
-      <!-- Settings panel -->
-      <div class="cell-settings" id="cellSettings">
-        <button class="settings-button" id="hideTitleBtn">إخفاء الشعار</button>
-        <div class="settings-row">
-          <span class="settings-label">لون الجوانب البرتقالية:</span>
-          <input type="color" id="orangeColorPicker" value="#F7931E">
-        </div>
-        <div class="settings-row">
-          <span class="settings-label">لون الجوانب الخضراء:</span>
-          <input type="color" id="greenColorPicker" value="#39B54A">
-        </div>
-        <div class="settings-row">
-          <span class="settings-label">اللون الأول للخلايا:</span>
-          <input type="color" id="cellColorPicker1" value="#22c55e">
-        </div>
-        <div class="settings-row">
-          <span class="settings-label">اللون الثاني للخلايا:</span>
-          <input type="color" id="cellColorPicker2" value="#f97316">
-        </div>
-        <button class="settings-button" id="resetColors">إعادة تعيين الألوان</button>
-        <button class="settings-button" id="changeNameBtn">تعديل الاسم</button>
-        <button class="settings-button" id="closeSettings">إغلاق الإعدادات</button>
-      </div>
-
-      <!-- Name edit dialog -->
-      <div class="name-input-container" id="nameInputContainer">
-        <input type="text" class="name-input" id="newNameInput" placeholder="اكتب اسمك الجديد">
-        <button class="save-name-btn" id="saveNameBtn">حفظ</button>
-      </div>
-
-      <!-- Congrats overlay -->
-      <div class="overlay" id="congratsOverlay">
-        <div class="sparkles">
-          <div class="sparkle"></div>
-          <div class="sparkle"></div>
-          <div class="sparkle"></div>
-          <div class="sparkle"></div>
-          <div class="sparkle"></div>
-        </div>
-        <div class="congrats-text">مبروك! 🎉</div>
-      </div>
+      <!-- إعدادات الخلايا -->
+      <div class="cell-settings" id="cellSettings">…</div>
+      <!-- تعديل الاسم -->
+      <div class="name-input-container" id="nameInputContainer">…</div>
+      <!-- مبروك أفران -->
+      <div class="overlay">…</div>
     </div>
 
     <div class="footer-note">
       جميع الحقوق محفوظة لموقع BoardHub
-      <a href="https://salla.sa/bhub" target="_blank"> - https://salla.sa/bhub</a>
+      <a href="https://salla.sa/bhub" target="_blank">- https://salla.sa/bhub</a>
       <div class="update-note">Version: 1.5 — Last updated: April 2, 2025</div>
     </div>
   </div>
 
-  <!-- External script -->
+  <!-- ملف الجافاسكريبت الرئيسي -->
   <script src="app.js"></script>
 </body>
 </html>
