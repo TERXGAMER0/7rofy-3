@@ -1,1 +1,2 @@
-/api/verify    /.netlify/functions/verify   200
+/.netlify/functions/verify  /.netlify/functions/verify  200
+/*                           /index.html                   200
