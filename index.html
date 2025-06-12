@@ -4,39 +4,1038 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, maximum-scale=3.0, user-scalable=yes">
   <title>حروف مع</title>
-  <!-- خطوط و CSS -->
-  <link rel="stylesheet" href="style.css">
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-  />
   <style>
-    /* إعادة تعريف الخط المستخدم محلياً */
     @font-face {
       font-family: 'AAGalaxy';
       src: url('AA-GALAXY.otf') format('opentype');
     }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #6F2BAA;
+      font-family: 'AAGalaxy', sans-serif;
+      direction: ltr;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    
+    /* خلفية الحروف المتساقطة */
+    #fallingContainer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      transition: opacity 1s ease;
+    }
+    
+    /* الصفحة الأولى */
+    .wrapper {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      gap: 20px;
+      padding: 0 10px;
+      transition: transform 0.5s ease;
+    }
+    .title {
+      font-size: 80px;
+      font-weight: bold;
+      margin: 0;
+      text-align: center;
+    }
+    .harouf {
+      color: #FFD400;
+      text-shadow: 5px 5px 0 #3c2056;
+    }
+    .ma {
+      color: #3ABAF4;
+      text-shadow: 5px 5px 0 #3c2056;
+      margin-left: 10px;
+    }
+    
+    .input-box {
+      width: 270px;
+      height: 60px;
+      background-color: #FFFFFF;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow 0.3s ease;
+    }
+    .input-box:hover {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    .input-box input {
+      width: 90%;
+      height: 80%;
+      border: none;
+      outline: none;
+      font-size: 20px;
+      text-align: center;
+      font-family: 'AAGalaxy', sans-serif;
+    }
+    
+    .start-button {
+      width: 300px;
+      height: 60px;
+      background-color: #FFFFFF;
+      color: #6F2BAA;
+      border: none;
+      border-radius: 8px;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: 'AAGalaxy', sans-serif;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    }
+    .start-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 8px 15px rgba(0,0,0,0.2);
+      background-color: #f0f0f0;
+    }
+    .start-button:active {
+      transform: scale(0.98);
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+    }
+    
+    /* الترانزيشن النهائي */
+    .final-text {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 3;
+      padding: 0 10px;
+      transition: opacity 0.5s ease;
+    }
+    .final-line1,
+    .final-line2,
+    .final-line3 {
+      margin: 0;
+      line-height: 1;
+      font-weight: bold;
+      font-family: 'AAGalaxy', sans-serif;
+    }
+    .final-line1 {
+      color: #FFD400;
+      text-shadow: 5px 5px 0 #3c2056;
+      font-size: 90px;
+    }
+    .final-line2 {
+      color: #3ABAF4;
+      text-shadow: 5px 5px 0 #3c2056;
+      font-size: 50px;
+      margin-top: -20px;
+      transform: translateX(-50px);
+    }
+    .final-line3 {
+      color: #e43b41;
+      text-shadow: 5px 5px 0 #3c2056;
+      font-size: 80px;
+      margin-top: -10px;
+    }
+    @media (max-width: 1024px) {
+      .final-line1 {
+        font-size: 70px;
+      }
+      .final-line2 {
+        font-size: 40px;
+        margin-top: -15px;
+        transform: translateX(-30px);
+      }
+      .final-line3 {
+        font-size: 60px;
+        margin-top: -8px;
+      }
+    }
+    @media (max-width: 576px) {
+      .final-line1 {
+        font-size: 50px;
+      }
+      .final-line2 {
+        font-size: 30px;
+        margin-top: -10px;
+        transform: translateX(-20px);
+      }
+      .final-line3 {
+        font-size: 45px;
+        margin-top: -5px;
+      }
+    }
+    
+    /* أنيميشن الترانزيشن */
+    .animated {
+      animation: popup 2.5s ease-in-out forwards;
+    }
+    @keyframes popup {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(2) rotate(5deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0);
+        opacity: 0;
+      }
+    }
+    
+    /* أنيميشن الحروف المتساقطة */
+    .falling-letter {
+      position: absolute;
+      color: #FFFFFF;
+      font-family: 'AAGalaxy', sans-serif;
+      text-shadow: 5px 5px 0 #3c2056;
+      font-size: 40px;
+      opacity: 0.8;
+      animation: fall linear forwards;
+    }
+    @keyframes fall {
+      0% {
+        transform: translateY(0);
+      }
+      100% {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+    
+    /* أنماط اللعبة */
+    .game-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #6F2BAA;
+      z-index: 10;
+      transition: opacity 0.5s ease;
+    }
+    .game-title {
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 11;
+    }
+    .game-title .harouf {
+      color: #FFD400;
+      text-shadow: 5px 5px 0 #3c2056;
+      font-size: 60px;
+      margin: 0;
+      line-height: 1;
+    }
+    .game-title .ma {
+      color: #3ABAF4;
+      text-shadow: 5px 5px 0 #3c2056;
+      font-size: 30px;
+      margin-top: -10px;
+      line-height: 1;
+      transform: translateX(-40px);
+    }
+    .game-title .player-name {
+      color: #e43b41;
+      text-shadow: 5px 5px 0 #3c2056;
+      font-size: 50px;
+      margin-top: -10px;
+      line-height: 1;
+    }
+    @media (max-width: 1024px) {
+      .game-title .harouf {
+        font-size: 60px;
+      }
+      .game-title .ma {
+        font-size: 40px;
+        margin-top: -8px;
+        transform: translateX(-30px);
+      }
+      .game-title .player-name {
+        font-size: 50px;
+        margin-top: -8px;
+      }
+    }
+    @media (max-width: 576px) {
+      .game-title .harouf {
+        font-size: 40px;
+      }
+      .game-title .ma {
+        font-size: 25px;
+        margin-top: -5px;
+        transform: translateX(-20px);
+      }
+      .game-title .player-name {
+        font-size: 40px;
+        margin-top: -5px;
+      }
+    }
+    
+    @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+    .rubik {
+      font-family: "Rubik", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 400;
+      font-style: normal;
+    }
+    .game-content * {
+      font-family: "Rubik", sans-serif;
+      user-select: none;
+    }
+    .game-content {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      height: 100vh;
+      width: 100vw;
+      position: relative;
+      overflow: hidden;
+      touch-action: auto;
+      overscroll-behavior: contain;
+    }
+    .buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      position: relative;
+      z-index: 3;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+      padding: 0 20px;
+      box-sizing: border-box;
+      z-index: 10;
+      
+    }
+    .game-button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 2rem;
+      color: #fff;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s, transform 0.2s;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+      white-space: nowrap;
+      flex: 1 1 auto;
+      min-width: 120px;
+      max-width: 200px;
+      z-index: 10;
+    }
+    .restart {
+      background-color: #dc3545;
+      z-index: 10;
+    }
+    .restart:hover {
+      background-color: #c82333;
+      transform: translateY(-2px);
+      z-index: 10;
+    }
+    .settings-btn {
+      background-color: #6c757d;
+      z-index: 10;
+    }
+    .settings-btn:hover {
+      background-color: #5a6268;
+      transform: translateY(-2px);
+      z-index: 10;
+    }
+    .congrats-btn {
+      background-color: #3ABAF4;
+      z-index: 10;
+    }
+    .congrats-btn:hover {
+      background-color: #2a9fd8;
+      transform: translateY(-2px);
+      z-index: 10;
+    }
+    
+    .main {
+      --s: 80px;
+      --m: 0px;
+      transform: translateX(-15px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+    .row {
+      display: flex;
+      margin-bottom: -30px;
+      justify-content: center;
+    }
+    .row:nth-child(even) {
+      margin-left: calc(var(--s) / 1 + var(--m));
+    }
+    @media (max-width: 768px) {
+      .main {
+        --s: 60px;
+        --m: 1px;
+        transform: translateX(-10px);
+      }
+    }
+    
+    /* الخلية */
+    .cell {
+      width: var(--s);
+      margin: var(--m);
+      height: calc(var(--s) * 1.1547);
+      display: inline-flex;
+      font-size: 1.2rem;
+      font-weight: bold;
+      clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+      background: rgb(218, 218, 218);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      transition: none !important;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 0 0 2px white;
+      position: relative;
+      user-select: none;
+    }
+    .cell:focus,
+    .cell:active {
+      outline: none;
+      box-shadow: 0 0 0 2px white;
+    }
+    
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 1000;
+    }
+    .overlay.active {
+      display: flex;
+    }
+    .sparkles {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .sparkle {
+      width: 3rem;
+      height: 3rem;
+      background: #fbbf24;
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+      animation: bounce 1s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+    .congrats-text {
+      color: rgb(218, 218, 218);
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    
+    /* الحاوية الرئيسية */
+    .container {
+      width: 90%;
+      max-width: 659px;
+      height: 45vh;
+      min-height: 400px;
+      background-color: #F7931E;
+      border-radius: 30px;
+      border: 10px solid #2E1A47;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+    }
+    .top-bottom {
+      position: absolute;
+      width: 100%;
+      height: 12%;
+      background-color: #39B54A;
+    }
+    .top {
+      top: 0;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+    .bottom {
+      bottom: 0;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+    
+    /* نافذة الإعدادات */
+    .cell-settings {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #3c2056;
+      padding: 15px;
+      border-radius: 10px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 100;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 400px;
+    }
+    .cell-settings.active {
+      display: flex;
+    }
+    .settings-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .settings-label {
+      color: white;
+      font-size: 16px;
+      margin-right: 10px;
+      z-index: 10;
+    }
+    .settings-button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 2rem;
+      background-color: #3ABAF4;
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s;
+      margin-top: 10px;
+      z-index: 10;
+    }
+    .settings-button:hover {
+      background-color: #2a9fd8;
+    }
+    
+    /* زر إعادة تعيين الألوان */
+    #resetColors {
+      background-color: #6c757d;
+    }
+    #resetColors:hover {
+      background-color: #5a6268;
+    }
+    
+    /* نافذة تعديل الاسم */
+    .name-input-container {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #3c2056;
+      padding: 20px;
+      border-radius: 10px;
+      z-index: 100;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      width: 80%;
+      max-width: 400px;
+    }
+    .name-input-container.active {
+      display: block;
+    }
+    .name-input {
+      width: 95%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+    }
+    .save-name-btn {
+      width: 100%;
+      padding: 10px;
+      background-color: #3ABAF4;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .save-name-btn:hover {
+      background-color: #2a9fd8;
+    }
+    
+    @media (max-width: 768px) {
+      .buttons {
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+        z-index: 10;
+      }
+      .game-button {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
+        z-index: 10;
+      }
+      .main {
+        --s: 60px;
+        --m: 1px;
+      }
+      .cell {
+        font-size: 1rem;
+      }
+      .congrats-text {
+        font-size: 1.5rem;
+      }
+      .container {
+        width: 95%;
+        height: 40vh;
+        min-height: 300px;
+        border-width: 5px;
+      }
+      .top-bottom {
+        height: 15%;
+      }
+      .row {
+        margin-bottom: -15px;
+      }
+      .game-title {
+        font-size: 30px;
+        top: 10px;
+      }
+      .cell-settings {
+        width: 95%;
+        padding: 10px;
+      }
+    }
+    @media (min-width: 769px) {
+      .container {
+        width: 659px;
+        height: 520px;
+      }
+      .main {
+        --s: 100px;
+        --m: 1px;
+      }
+      .cell {
+        font-size: 1.5rem;
+      }
+    }
+    
+    /* التعديلات الخاصة بالوضع الأفقي على أجهزة iPhone */
+    @media screen and (max-width: 932px) and (orientation: landscape) {
+      .container {
+        height: 70vh !important;
+        width: 60% !important;
+        max-width: 400px;
+        min-height: auto;
+      }
+      
+      .buttons {
+        margin-top: 0.5rem !important;
+        gap: 0.5rem !important;
+        width: 100% !important;
+        padding: 0 5% !important;
+        position: absolute;
+        bottom: 10px;
+        z-index: 10;
+        justify-content: flex-end;
+      }
+      
+      .game-button {
+        font-size: 0.8rem !important;
+        padding: 0.4rem 0.8rem !important;
+        min-width: 100px;
+        max-width: 150px;
+        z-index: 10;
+      }
+      
+      .main {
+        --s: 50px !important;
+        --m: 1px !important;
+        transform: translateX(-5px) !important;
+        padding-top: 5% !important;
+      }
+      
+      .cell {
+        width: var(--s);
+        margin: var(--m);
+        height: calc(var(--s) * 1.1547);
+        display: inline-flex;
+        font-size: 1rem;
+        font-weight: bold;
+        clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+        background: rgb(218, 218, 218);
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        transition: none !important;
+        -webkit-tap-highlight-color: transparent;
+        box-shadow: 0 0 0 2px white;
+        position: relative;
+        user-select: none;
+        top: -45px !important;
+      }
+      
+      .row {
+        margin-bottom: -15px !important;
+      }
+      
+      .game-title {
+        top: 5px !important;
+      }
+      
+      .game-title .harouf {
+        font-size: 40px !important;
+      }
+      
+      .game-title .ma {
+        font-size: 25px !important;
+        margin-top: -5px !important;
+        transform: translateX(-20px) !important;
+      }
+      
+      .game-title .player-name {
+        font-size: 30px !important;
+        margin-top: -5px !important;
+      }
+      
+      .footer-note {
+        font-size: 0.6rem !important;
+        bottom: 2px !important;
+      }
+      
+      .update-note {
+        font-size: 0.5rem !important;
+      }
+      
+      .game-content {
+        justify-content: flex-start;
+        padding-top: 60px;
+      }
+      
+      .cell-settings {
+        bottom: 60px;
+      }
+    }
+    
+    @media (max-width: 380px) and (orientation: portrait) {
+      .buttons {
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+        z-index: 10;
+      }
+      .game-button {
+        font-size: 0.8rem;
+        padding: 0.3rem 0.6rem;
+        z-index: 10;
+      }
+      .main {
+        --s: 38px;
+        --m: 1px;
+        transform: translateX(-18px);
+      }
+      .cell {
+        font-size: 0.9rem;
+        margin-top: 4px;
+      }
+      .container {
+        width: 95%;
+        height: 10vh;
+        min-height: 240px;
+        border-width: 5px;
+      }
+      .top-bottom {
+        height: 14%;
+      }
+      .row {
+        margin-bottom: -10px;
+      }
+      .congrats-text {
+        font-size: 1.2rem;
+      }
+      .footer-note {
+        font-size: 0.6rem;
+        bottom: 2px;
+        z-index: 0;
+      }
+      .update-note {
+        font-size: 0.5rem;
+        z-index: 0;
+      }
+    }
+    
+    .footer-note {
+      font-size: 0.75rem;
+      color: #ddd;
+      text-align: center;
+      margin-top: auto;
+      padding: 10px 0;
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      z-index: 0;
+    }
+    .footer-note a {
+      color: #b3e5fc;
+      text-decoration: none;
+    }
+    .footer-note a:hover {
+      text-decoration: underline;
+    }
+    .update-note {
+      font-size: 0.6rem;
+      color: #aaa;
+      margin-top: 4px;
+    }
+    .orientation-warning {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      padding: 1rem;
+      background-color: #dc3545;
+      color: white;
+      text-align: center;
+      font-size: 1rem;
+      z-index: 2000;
+    }
+    @media screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+      .orientation-warning {
+        display: block;
+      }
+    }
+    @media screen and (min-width: 768px) and (max-width: 1024px) and (max-width: 1180px){
+      .game-title .harouf {
+        font-size: 60px;
+      }
+      .game-title .ma {
+        font-size: 40px;
+        margin-top: -6px;
+        transform: translateX(-20px);
+      }
+      .game-title .player-name {
+        font-size: 40px;
+        margin-top: 44px;
+      }
+    }
+    .hidden {
+      display: none !important;
+    }
+    @media screen and (max-width: 932px) and (orientation: landscape) {
+      .buttons {
+        justify-content: flex-end;
+      }
+    }
+    /* تعديلات خاصة لأجهزة iPhone في الوضع العمودي */
+    @media screen and (max-width: 767px) and (orientation: portrait) and (-webkit-min-device-pixel-ratio: 2) {
+      .buttons {
+        position: fixed;
+        bottom: 200px;
+        left: 0;
+        right: 0;
+        padding: 0 20px;
+        z-index: 10;
+        justify-content: center;
+      }
+      
+      .game-button {
+        min-width: 100px;
+        max-width: 120px;
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
+      }
+      
+      .main {
+        margin-bottom: 70px; /* لإعطاء مساحة للأزرار في الأسفل */
+      }
+      .container {
+        height: 35vh !important; /* تعديل ارتفاع الحاوية */
+        min-height: 200px !important;
+      }
+      .row {
+        margin-bottom: -18px !important; /* زيادة تقارب الصفوف */
+      }
+    }
+    @media screen and (max-width: 932px) and (orientation: landscape) {
+      .buttons {
+        position: fixed !important;
+        bottom: 0px !important;
+        left: 70% !important;
+        transform: translateX(-10%) !important;
+        width: 95% !important;
+        max-width: 300px !important;
+        padding: 5px 5px !important;
+        z-index: 1000 !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        margin: 0 auto !important;
+      }
+
+      .game-button {
+        font-size: 0.4rem !important;
+        padding: 12px 15px !important;
+        min-width: 80px !important;
+        margin: 0 5px !important;
+        z-index: 1001 !important;
+        flex: 1 !important;
+        max-width: 70px !important;
+        transition: all 0.3s ease !important;
+      }
+      .container {
+        border-width: 8px !important;
+        height: 63vh !important;
+    }
+    .cell-settings {
+    width: 85%;
+    max-width: 350px;
+    padding: 8px;
+    bottom: 50px;
+    gap: 6px;
+  }
+  
+  .settings-row {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  
+  .settings-label {
+    font-size: 12px;
+    margin-right: 5px;
+    flex: 1 0 40%;
+  }
+  
+  input[type="color"] {
+    width: 50px;
+    height: 25px;
+    flex: 0 0 50px;
+  }
+  
+  .settings-button {
+    padding: 6px 8px;
+    font-size: 11px;
+    margin-top: 5px;
+  }
+  
+  /* تعديل إضافي للأزرار الرئيسية */
+  .buttons {
+    bottom: 5px !important;
+    padding: 0 5px !important;
+  }
+  
+  .game-button {
+    font-size: 0.6rem !important;
+    padding: 6px 8px !important;
+    min-width: 70px !important;
+    max-width: 90px !important;
+  }
+}
+      @media screen and (max-width: 844px) and (orientation: landscape) {
+        .buttons {
+        position: fixed !important;
+        bottom: 0px !important;
+        left: 68% !important;
+        transform: translateX(-10%) !important;
+        width: 95% !important;
+        max-width: 300px !important;
+        padding: 5px 5px !important;
+        z-index: 1000 !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        margin: 0 auto !important;
+      }
+
+      .game-button {
+        font-size: 0.4rem !important;
+        padding: 12px 15px !important;
+        min-width: 80px !important;
+        margin: 0 5px !important;
+        z-index: 1001 !important;
+        flex: 1 !important;
+        max-width: 70px !important;
+        transition: all 0.3s ease !important;
+      }
+    /* تعديل الحاوية لتعويض التغيير */
+    .container {
+        border-width: 8px !important;
+        height: 63vh !important;
+    }
+    .cell-settings {
+    width: 85%;
+    max-width: 350px;
+    padding: 8px;
+    bottom: 50px;
+    gap: 6px;
+  }
+  
+  .settings-row {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  
+  .settings-label {
+    font-size: 12px;
+    margin-right: 5px;
+    flex: 1 0 40%;
+  }
+  
+  input[type="color"] {
+    width: 50px;
+    height: 25px;
+    flex: 0 0 50px;
+  }
+  
+  .settings-button {
+    padding: 6px 8px;
+    font-size: 11px;
+    margin-top: 5px;
+  }
+  
+  /* تعديل إضافي للأزرار الرئيسية */
+  .buttons {
+    bottom: 5px !important;
+    padding: 0 5px !important;
+  }
+  
+  .game-button {
+    font-size: 0.6rem !important;
+    padding: 6px 8px !important;
+    min-width: 70px !important;
+    max-width: 90px !important;
+  }
+}
   </style>
 </head>
 <body>
-  <!-- واجهة التحقق من الرمز السري -->
-  <div id="secret-overlay">
-    <div class="secret-container">
-      <h2>أدخل رمز التفعيل المجاني للدخول</h2>
-      <input type="text" id="secret-code" placeholder="الرمز السري" />
-      <br />
-      <button id="secret-submit">ادخال</button>
-      <p id="error-message" class="error-message">رمز خاطئ، حاول مرة أخرى</p>
-      <p class="help-text">
-        إذا لم يكن لديك رمز تفعيل، يمكنك الحصول عليه مجانًا من بوت التيليجرام:
-        <a href="https://t.me/ii40TSM_bot" target="_blank">اضغط هنا</a>
-      </p>
-    </div>
-  </div>
-
   <!-- خلفية الحروف المتساقطة -->
   <div id="fallingContainer"></div>
-
+  
   <!-- الصفحة الأولى -->
   <div class="wrapper" id="wrapper">
     <h1 class="title">
@@ -48,14 +1047,14 @@
     </div>
     <button class="start-button" id="startBtn">ابدأ اللعبة</button>
   </div>
-
+  
   <!-- الترانزيشن النهائي -->
   <div class="final-text" id="finalText">
     <div class="final-line1">حروف</div>
     <div class="final-line2">مع</div>
     <div class="final-line3" id="finalName"></div>
   </div>
-
+  
   <!-- اللعبة -->
   <div class="game-container" id="gameContainer">
     <div class="game-title" id="gameTitle">
@@ -63,40 +1062,323 @@
       <div class="ma">مع</div>
       <div class="player-name" id="gamePlayerName"></div>
     </div>
-
+    
     <div class="game-content">
       <div class="orientation-warning">🎮 العب بالشاشة الأفقية لتجربة أفضل</div>
-      <div class="layout">
+      <div style="margin: auto; text-align: center;">
         <div class="container">
           <div class="top-bottom top"></div>
           <div class="top-bottom bottom"></div>
         </div>
-        <div class="play-area">
-          <div class="main" id="mainGrid"></div>
-          <div class="buttons">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <div class="main" style="padding-top: 14%;"></div>
+          <div class="buttons" style="padding: 5%;">
             <button class="game-button restart">إعادة تعيين</button>
             <button class="game-button settings-btn">الإعدادات</button>
             <button class="game-button congrats-btn">مبروك</button>
           </div>
         </div>
       </div>
-
-      <!-- إعدادات الخلايا -->
-      <div class="cell-settings" id="cellSettings">…</div>
-      <!-- تعديل الاسم -->
-      <div class="name-input-container" id="nameInputContainer">…</div>
-      <!-- مبروك أفران -->
-      <div class="overlay">…</div>
+      
+      <!-- نافذة الإعدادات -->
+      <div class="cell-settings" id="cellSettings">
+        <button class="settings-button" id="hideTitleBtn">إخفاء الشعار</button>
+        
+        <div class="settings-row">
+          <span class="settings-label">لون الجوانب البرتقالية:</span>
+          <input type="color" id="orangeColorPicker" value="#F7931E">
+        </div>
+        
+        <div class="settings-row">
+          <span class="settings-label">لون الجوانب الخضراء:</span>
+          <input type="color" id="greenColorPicker" value="#39B54A">
+        </div>
+        
+        <div class="settings-row">
+          <span class="settings-label">اللون الأول للخلايا:</span>
+          <input type="color" id="cellColorPicker1" value="#22c55e">
+        </div>
+        
+        <div class="settings-row">
+          <span class="settings-label">اللون الثاني للخلايا:</span>
+          <input type="color" id="cellColorPicker2" value="#f97316">
+        </div>
+        
+        <!-- زر إعادة تعيين الألوان -->
+        <button class="settings-button" id="resetColors">إعادة تعيين الألوان</button>
+        
+        <button class="settings-button" id="changeNameBtn">تعديل الاسم</button>
+        <button class="settings-button" id="closeSettings">إغلاق الإعدادات</button>
+      </div>
+      
+      <!-- نافذة تعديل الاسم -->
+      <div class="name-input-container" id="nameInputContainer">
+        <input type="text" class="name-input" id="newNameInput" placeholder="اكتب اسمك الجديد">
+        <button class="save-name-btn" id="saveNameBtn">حفظ</button>
+      </div>
+      
+      <!-- نافذة مبروك -->
+      <div class="overlay">
+        <div class="sparkles">
+          <div class="sparkle" style="animation-delay: 0s"></div>
+          <div class="sparkle" style="animation-delay: 0.2s"></div>
+          <div class="sparkle" style="animation-delay: 0.4s"></div>
+          <div class="sparkle" style="animation-delay: 0.6s"></div>
+          <div class="sparkle" style="animation-delay: 0.8s"></div>
+        </div>
+        <div class="congrats-text">مبروك! 🎉</div>
+      </div>
     </div>
-
+    
     <div class="footer-note">
-      جميع الحقوق محفوظة لموقع BoardHub
-      <a href="https://salla.sa/bhub" target="_blank">- https://salla.sa/bhub</a>
+      جميع الحقوق محفوظة لموقع BoardHub 
+      <a href="https://salla.sa/bhub" target="_blank"> - https://salla.sa/bhub</a>
       <div class="update-note">Version: 1.5 — Last updated: April 2, 2025</div>
     </div>
   </div>
-
-  <!-- ملف الجافاسكريبت الرئيسي -->
-  <script src="app.js"></script>
+  
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const wrapper = document.getElementById('wrapper');
+    const finalText = document.getElementById('finalText');
+    const finalName = document.getElementById('finalName');
+    const playerNameInput = document.getElementById('playerName');
+    const fallingContainer = document.getElementById('fallingContainer');
+    const gameContainer = document.getElementById('gameContainer');
+    const gamePlayerName = document.getElementById('gamePlayerName');
+    const gameTitle = document.getElementById('gameTitle');
+    
+    // بدء اللعبة
+    startBtn.addEventListener('click', () => {
+      const playerName = playerNameInput.value.trim() || "بدون اسم";
+      finalName.textContent = playerName;
+      gamePlayerName.textContent = playerName;
+      
+      wrapper.style.transform = 'scale(0)';
+      setTimeout(() => { wrapper.style.display = 'none'; }, 500);
+      
+      finalText.style.display = 'flex';
+      finalText.classList.add('animated');
+      
+      generateFallingLetters();
+    });
+    
+    // إنشاء الحروف المتساقطة بدون حرف "ا"
+    function generateFallingLetters() {
+      fallingContainer.innerHTML = '';
+      const arabicLetters = "بتثجحخدذرازسشصضطظعغفقكلمنهوي";
+      const count = 40;
+      for (let i = 0; i < count; i++) {
+        const letter = document.createElement('span');
+        letter.classList.add('falling-letter');
+        letter.textContent = arabicLetters.charAt(Math.floor(Math.random() * arabicLetters.length));
+        letter.style.left = Math.random() * 100 + "%";
+        letter.style.top = (-50 - Math.random() * 250) + "px";
+        let duration = 1.5 + Math.random() * 1.5;
+        letter.style.animationDuration = duration + "s";
+        letter.style.animationDelay = (Math.random() * 0.3) + "s";
+        fallingContainer.appendChild(letter);
+      }
+    }
+    
+    finalText.addEventListener('animationend', () => {
+      fallingContainer.style.opacity = "0";
+      finalText.style.display = 'none';
+      gameContainer.style.display = 'block';
+      gameContainer.style.opacity = "0";
+      setTimeout(() => { gameContainer.style.opacity = "1"; }, 50);
+      initializeGame();
+    });
+    
+    function initializeGame() {
+      const arabicLetters = "بتثجحخدذرازسشصضطظعغفقكلمنهوي".split("");
+      const main = document.querySelector(".main");
+      const overlay = document.querySelector(".overlay");
+      const restartButton = document.querySelector(".restart");
+      const settingsBtn = document.querySelector(".settings-btn");
+      const cellSettings = document.getElementById("cellSettings");
+      const closeSettings = document.getElementById("closeSettings");
+      const nameInputContainer = document.getElementById("nameInputContainer");
+      const newNameInput = document.getElementById("newNameInput");
+      const saveNameBtn = document.getElementById("saveNameBtn");
+      const hideTitleBtn = document.getElementById("hideTitleBtn");
+      const changeNameBtn = document.getElementById("changeNameBtn");
+      const congratsBtn = document.querySelector(".congrats-btn");
+      
+      // مؤشرات ألوان الحاوية
+      const orangeColorPicker = document.getElementById("orangeColorPicker");
+      const greenColorPicker = document.getElementById("greenColorPicker");
+      
+      // مؤشرات ألوان الخلايا
+      const cellColorPicker1 = document.getElementById("cellColorPicker1"); // الحالة الأولى
+      const cellColorPicker2 = document.getElementById("cellColorPicker2"); // الحالة الثانية
+      
+      // زر إعادة تعيين الألوان
+      const resetColorsBtn = document.getElementById("resetColors");
+      
+      function resetAllColors() {
+        cellColorPicker1.value = "#22c55e";
+        cellColorPicker2.value = "#f97316";
+        orangeColorPicker.value = "#F7931E";
+        greenColorPicker.value = "#39B54A";
+        document.querySelector(".container").style.backgroundColor = orangeColorPicker.value;
+        document.querySelectorAll(".top-bottom").forEach(el => {
+          el.style.backgroundColor = greenColorPicker.value;
+        });
+        refreshCellColors();
+      }
+      
+      function refreshCellColors() {
+        document.querySelectorAll(".cell").forEach(cell => {
+          cell.style.backgroundColor = getColorForState(cell.dataset.state);
+        });
+      }
+      
+      function createHexGrid() {
+        const rowsConfig = [5, 5, 5, 5, 5];
+        let letterIndex = 0;
+        main.innerHTML = '';
+        rowsConfig.forEach((cellCount) => {
+          const row = document.createElement("div");
+          row.className = "row";
+          for (let i = 0; i < cellCount; i++) {
+            if (letterIndex < arabicLetters.length) {
+              const cell = document.createElement("div");
+              cell.className = "cell";
+              cell.dataset.state = "0";
+              row.appendChild(cell);
+              letterIndex++;
+            }
+          }
+          main.appendChild(row);
+        });
+      }
+      
+      function initializeLetters() {
+        const cells = document.querySelectorAll(".cell");
+        const shuffledLetters = [...arabicLetters]
+          .sort(() => Math.random() - 0.5)
+          .slice(0, 28);
+        cells.forEach((cell, index) => {
+          cell.textContent = shuffledLetters[index];
+          cell.dataset.state = "0";
+          cell.style.backgroundColor = "rgb(218, 218, 218)";
+        });
+      }
+      
+      // تناوب الحالة: 0 -> 1 -> 2 -> 0
+      function getNextState(state) {
+        if (!state || state === "0") return "1";
+        else if (state === "1") return "2";
+        else return "0";
+      }
+      
+      // تحديد اللون للخلايا بناءً على الحالة
+      function getColorForState(state) {
+        if (state === "0") return "rgb(218, 218, 218)";
+        if (state === "1") return cellColorPicker1.value;
+        if (state === "2") return cellColorPicker2.value;
+      }
+      
+      // النقر على خلية: تغيير حالتها ولونها وفقًا
+      main.addEventListener("click", (e) => {
+        if (!e.target.classList.contains("cell")) return;
+        const cell = e.target;
+        const newState = getNextState(cell.dataset.state);
+        cell.dataset.state = newState;
+        cell.style.backgroundColor = getColorForState(newState);
+      });
+      
+      // دعم النقر بزر الماوس الأيمن لتبديل اللون الأصفر
+      main.addEventListener("contextmenu", (e) => {
+        if (!e.target.classList.contains("cell")) return;
+        e.preventDefault();
+        if(e.target.style.backgroundColor === "rgb(255, 215, 75)") {
+          e.target.style.backgroundColor = "rgb(218, 218, 218)";
+        } else {
+          e.target.style.backgroundColor = "#ffd74b";
+        }
+      });
+      
+      // دعم اللمس (hold) لتبديل اللون الأصفر - النسخة المعدلة
+      let touchedCell = null;
+      main.addEventListener("touchstart", (e) => {
+        if (!e.target.classList.contains("cell")) return;
+        touchedCell = e.target;
+        
+        setTimeout(() => {
+          if (touchedCell === e.target) { // التأكد من أن الإصبع ما زال على نفس الخلية
+            if(e.target.style.backgroundColor === "rgb(255, 215, 75)") {
+              e.target.style.backgroundColor = "rgb(218, 218, 218)";
+            } else {
+              e.target.style.backgroundColor = "#ffd74b";
+            }
+          }
+        }, 1000); // الضغط لمدة ثانية واحدة
+      });
+      
+      main.addEventListener("touchend", (e) => {
+        touchedCell = null;
+      });
+      
+      // زر إعادة التعيين (لجميع الخلايا)
+      restartButton.addEventListener("click", () => {
+        document.querySelectorAll(".cell").forEach(cell => {
+          cell.dataset.state = "0";
+          cell.style.backgroundColor = "rgb(218, 218, 218)";
+        });
+        initializeLetters();
+      });
+      
+      // زر مبروك
+      congratsBtn.addEventListener("click", () => {
+        overlay.classList.add("active");
+        setTimeout(() => {
+          overlay.classList.remove("active");
+        }, 3000);
+      });
+      
+      // إعدادات الإظهار/الإخفاء
+      settingsBtn.addEventListener("click", () => {
+        cellSettings.classList.toggle("active");
+      });
+      closeSettings.addEventListener("click", () => {
+        cellSettings.classList.remove("active");
+      });
+      
+      orangeColorPicker.addEventListener("input", (e) => {
+        document.querySelector(".container").style.backgroundColor = e.target.value;
+      });
+      
+      greenColorPicker.addEventListener("input", (e) => {
+        document.querySelectorAll(".top-bottom").forEach(el => {
+          el.style.backgroundColor = e.target.value;
+        });
+      });
+      
+      cellColorPicker1.addEventListener("input", refreshCellColors);
+      cellColorPicker2.addEventListener("input", refreshCellColors);
+      
+      resetColorsBtn.addEventListener("click", resetAllColors);
+      
+      hideTitleBtn.addEventListener("click", () => {
+        gameTitle.classList.toggle("hidden");
+        hideTitleBtn.textContent = gameTitle.classList.contains("hidden") ? "إظهار الشعار" : "إخفاء الشعار";
+      });
+      
+      changeNameBtn.addEventListener("click", () => {
+        nameInputContainer.classList.add("active");
+        newNameInput.value = gamePlayerName.textContent;
+      });
+      saveNameBtn.addEventListener("click", () => {
+        const newName = newNameInput.value.trim() || "بدون اسم";
+        gamePlayerName.textContent = newName;
+        nameInputContainer.classList.remove("active");
+      });
+      
+      createHexGrid();
+      initializeLetters();
+    }
+  </script>
 </body>
 </html>
