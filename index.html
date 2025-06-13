@@ -7,7 +7,7 @@
   <style>
     @font-face {
       font-family: 'AAGalaxy';
-      src: url('fonts/AA-GALAXY.otf') format('opentype');
+      src: url('AA-GALAXY.otf') format('opentype');
     }
     
     body {
@@ -1033,6 +1033,41 @@
   </style>
 </head>
 <body>
+      <!-- ▲ الصق واجهة التفعيل هنا ▲ -->
+  <div id="secret-overlay" style="
+      position: fixed; inset: 0;
+      background: rgba(75,0,130,0.9);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2000;
+    ">
+    <div style="background:#fff;padding:20px;border-radius:10px;text-align:center;">
+      <h2 style="margin-bottom:15px;font-family:'AAGalaxy',sans-serif;">
+        أدخل رمز التفعيل للدخول
+      </h2>
+      <input
+        type="text"
+        id="secret-code"
+        placeholder="الرمز السري"
+        style="padding:10px;font-size:16px;width:200px;margin-bottom:10px;"
+      /><br />
+      <button
+        id="secret-submit"
+        style="padding:10px 20px;font-size:16px;cursor:pointer;"
+      >
+        دخول
+      </button>
+      <p id="error-message" style="color:red; display:none; margin-top:10px;">
+        رمز خاطئ، حاول مرة أخرى
+      </p>
+      <p style="font-size:14px; margin-top:10px;">
+        إذا لم يكن لديك رمز تفعيل مجاناً يمكنك الحصول عليه من بوت تيليجرام:
+        <br />
+        <a href="https://t.me/ii40TSM_bot" target="_blank">اضغط هنا</a>
+      </p>
+    </div>
+  </div>
+  <!-- ▼ انتهى الصق هنا ▼ -->
+
   <!-- خلفية الحروف المتساقطة -->
   <div id="fallingContainer"></div>
   
@@ -1380,5 +1415,29 @@
       initializeLetters();
     }
   </script>
+    <!-- ▲ الصق سكربت التحقق هنا ▲ -->
+  <script>
+    document.getElementById("secret-submit").addEventListener("click", function () {
+      const code = document.getElementById("secret-code").value.trim();
+      fetch("/.netlify/functions/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.valid) {
+            document.getElementById("secret-overlay").style.display = "none";
+          } else {
+            document.getElementById("error-message").style.display = "block";
+          }
+        })
+        .catch(err => {
+          console.error("Error during verification:", err);
+          alert("فشل الاتصال بخدمة التحقق.");
+        });
+    });
+  </script>
+  <!-- ▼ انتهى الصق هنا ▼ -->
 </body>
 </html>
